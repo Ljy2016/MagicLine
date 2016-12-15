@@ -147,6 +147,7 @@ public class MagicLineAct extends Activity implements View.OnClickListener {
             startBtn.setTextColor(Color.BLACK);
             startBtn.setClickable(true);
             seleteDraw.setClickable(true);
+            Log.e("TAG", "drawOver: " );
         }
     };
 

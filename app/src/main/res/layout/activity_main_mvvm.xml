@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="point"
+            type="com.czy.magicline.demo.PointModel"></variable>
+
+        <variable
+            name="myClick"
+            type="android.view.View.OnClickListener"></variable>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="中心x坐标："
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="请输入点运动中心x坐标"
+                    android:text="@={point.centerX}"
+                    android:textColor="#000000"
+                    android:textColorHint="#999999"
+                    android:textSize="32px" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="中心y坐标："
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="请输入点运动中心y坐标"
+                    android:text="@={point.centerY}"
+                    android:textColor="#000000"
+                    android:textColorHint="#999999"
+                    android:textSize="32px" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="MaxX："
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="请输入点运动最大x坐标"
+                    android:text="@={point.maxX}"
+                    android:textColor="#000000"
+                    android:textColorHint="#999999"
+                    android:textSize="32px" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="MaxY："
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="请输入点运动最大y坐标"
+                    android:text="@={point.maxY}"
+                    android:textColor="#000000"
+                    android:textColorHint="#999999"
+                    android:textSize="32px" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="角速度："
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="请输入点运动的角速度"
+                    android:text="@={point.palstance}"
+                    android:textColor="#000000"
+                    android:textColorHint="#999999"
+                    android:textSize="32px" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:layout_marginTop="15dp"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/firstPoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="@{myClick}"
+                    android:text="编辑第一个点的信息"
+                    android:textColor="#fff"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/secondPint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="@{myClick}"
+                    android:text="编辑第二个点的信息"
+                    android:textColor="#fff"
+                    android:textColorHint="#999999"
+                    android:textSize="32px" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/conform"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:background="#00f"
+                android:onClick="@{myClick}"
+                android:text="确定"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+        <com.czy.magicline.demo.MagicLineViewPlus
+            android:id="@+id/myview"
+            android:layout_width="match_parent"
+            android:onClick="@{myClick}"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </FrameLayout>
+</layout>

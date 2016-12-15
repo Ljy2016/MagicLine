@@ -1,4 +1,4 @@
-package com.chenzy.magicline;
+package com.czy.magicline.demo;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -20,23 +20,13 @@ import java.util.Random;
  * 启发、原理:http://mp.weixin.qq.com/s/FieNhelCar1cZjhBS28ymQ
  * Created by zhangyu on 2016/9/7.
  */
-public class MagicLineView extends View {
+public class MagicLineViewPlus extends View {
     private static final String TAG = "MagicLineView";
     //起点在x、y移动范围
     private float p1XLength = 400, p1YLength = 20, speedP1 = 0.15f;
     private float p2XLength = 20, p2YLength = 400, speedP2 = 0.05f;
-    private double angleP1 = 0, angleP2 = 0;
-    private int viewWidth;
-
-    public int getViewWidth() {
-        return viewWidth;
-    }
-
-    public int getViewHeight() {
-        return viewHeight;
-    }
-
-    private int viewHeight;
+    private float angleP1 = 0, angleP2 = 0;
+    private int viewWidth, viewHeight;
     private Paint paint;
     Random rand;
     private ValueAnimator valueAnimator;
@@ -45,20 +35,34 @@ public class MagicLineView extends View {
     private DrawingListener drawingListener;
     //    private int[] colors = new int[]{Color.RED, Color.WHITE, Color.BLUE};
     //动画绘制的时间
-    private int animDuration =1000*5;
+    private int animDuration = 1000 * 10;
     private Path path;
 
-    public MagicLineView(Context context, AttributeSet attrs) {
+
+    private PointModel pointOne;
+    private PointModel pointTwo;
+
+    public void setPointOne(PointModel pointOne) {
+        this.pointOne = pointOne;
+        speedP1 = Float.parseFloat(pointOne.getPalstance());
+    }
+
+    public void setPointTwo(PointModel pointTwo) {
+        this.pointTwo = pointTwo;
+        speedP2 = Float.parseFloat(pointTwo.getPalstance());
+    }
+
+    public MagicLineViewPlus(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public MagicLineView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MagicLineViewPlus(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public MagicLineView(Context context) {
+    public MagicLineViewPlus(Context context) {
         super(context);
         init();
     }
@@ -74,7 +78,7 @@ public class MagicLineView extends View {
         paint.setStrokeWidth(2);
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.WHITE);
-        rand = new Random();
+//        rand = new Random();
         corrDatas = new ArrayList<>();
         path = new Path();
 
@@ -83,16 +87,15 @@ public class MagicLineView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         for (int i = 0; i < corrDatas.size(); i++) {
             CorrdinateData cd = corrDatas.get(i);
 //          Shader shader = new LinearGradient(cd.p1X, cd.p1Y, cd.p2X, cd.p2Y, colors, null, Shader.TileMode.MIRROR);
 //          paint.setShader(shader);
-            path.reset();
-            path.moveTo(cd.p1X, cd.p1Y);
-            path.quadTo(viewWidth / 2f, viewHeight / 2f, cd.p2X, cd.p2Y);
-//          canvas.drawLine(cd.p1X, cd.p1Y, cd.p2X, cd.p2Y, paint);
-            canvas.drawPath(path, paint);
+//            path.reset();
+//            path.moveTo(cd.p1X, cd.p1Y);
+//            path.quadTo(viewWidth / 2f, viewHeight / 2f, cd.p2X, cd.p2Y);
+            canvas.drawLine(cd.p1X, cd.p1Y, cd.p2X, cd.p2Y, paint);
+//            canvas.drawPath(path, paint);
         }
     }
 
@@ -100,6 +103,7 @@ public class MagicLineView extends View {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             calculate();
+            invalidate();
         }
     };
 
@@ -115,7 +119,7 @@ public class MagicLineView extends View {
         public void onAnimationEnd(Animator animation) {
             if (null != drawingListener)
                 drawingListener.drawOver();
-            invalidate();
+//            invalidate();
         }
 
         @Override
@@ -143,21 +147,25 @@ public class MagicLineView extends View {
     private void calculate() {
         angleP1 = angleP1 + speedP1;
         angleP2 = angleP2 + speedP2;
+        pointOne.setCurrentX(angleP1);
+        pointOne.setCurrentY(angleP2);
+        pointTwo.setCurrentX(angleP1);
+        pointTwo.setCurrentY(angleP2);
 
         //两个点的位置更新
-        float nowP1X = (float) (p1XLength * Math.cos(angleP1) + viewWidth / 2f);
+//        float nowP1X = (float) (p1XLength * Math.cos(angleP1) + viewWidth / 2f);
 //        Log.e(TAG, "calculate x1: " + nowP1X);
 //        Log.e(TAG, "calculate 弧度: " + angleP1);
 //        Log.e(TAG, "calculate 余弦值: " + Math.cos(angleP1));
-        float nowP1Y = (float) (p1YLength * Math.sin(angleP1) + viewHeight / 2f);
+//        float nowP1Y = (float) (p1YLength * Math.sin(angleP1) + viewHeight / 2f);
 //        float nowP1X = (float) rand.nextGaussian() * viewWidth;
 //        float nowP1Y = (float) rand.nextGaussian() * viewHeight;
 //        float nowP2X = rand.nextFloat() * viewWidth;
 //        float nowP2Y = rand.nextFloat() * viewHeight;
-        float nowP2X = (float) (p2XLength * Math.cos(angleP2) + viewWidth / 2f);
-        float nowP2Y = (float) (p2YLength * Math.sin(angleP2) + viewHeight / 2f);
+//        float nowP2X = (float) (p2XLength * Math.cos(angleP2) + viewWidth / 2f);
+//        float nowP2Y = (float) (p2YLength * Math.sin(angleP2) + viewHeight / 2f);
 
-        CorrdinateData corrdinataData = new CorrdinateData(nowP1X, nowP1Y, nowP2X, nowP2Y);
+        CorrdinateData corrdinataData = new CorrdinateData(pointOne.getCurrentX(), pointOne.getCurrentY(), pointTwo.getCurrentX(), pointTwo.getCurrentY());
         corrDatas.add(corrdinataData);
     }
 
