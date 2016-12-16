@@ -11,15 +11,15 @@ import android.widget.Toast;
 
 public class PointModel {
     //运动路径中心x坐标
-    private int centerX=540;
+    private int centerX = 540;
     //运动路径中心y坐标
-    private int centerY=960;
+    private int centerY = 960;
     //x轴最大值
-    private int maxX=500;
+    private int maxX = 500;
     //y轴最大值
-    private int maxY=500;
+    private int maxY = 500;
     //运动角速度
-    private float palstance=0.5f;
+    private float palstance = 0.5f;
     //当前x坐标
     private int currentX;
     //当前y坐标
@@ -98,15 +98,15 @@ public class PointModel {
         currentX = (int) (maxX * Math.cos(radina) + centerX);
     }
 
+    public void setCurrentY(float radina) {
+        currentY = (int) (maxY * Math.sin(radina) + centerY);
+    }
+
     public void setCurrentX(int currentX) {
         this.currentX = currentX;
     }
 
     public void setCurrentY(int currentY) {
         this.currentY = currentY;
-    }
-
-    public void setCurrentY(float radina) {
-        currentY = (int) (maxY * Math.sin(radina) + centerY);
     }
 }

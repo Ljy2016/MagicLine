@@ -19,6 +19,7 @@ import com.czy.magicline.demo.databinding.ActivityMainMvvmBinding;
 public class MainAvtivity extends Activity {
     private PointModel pointOne;
     private PointModel pointTwo;
+    private PointModel bezierPoint;
     private ActivityMainMvvmBinding binding;
 
     @Override
@@ -27,6 +28,7 @@ public class MainAvtivity extends Activity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_mvvm);
         pointOne = new PointModel();
         pointTwo = new PointModel();
+        bezierPoint = new PointModel();
         binding.setPoint(pointOne);
         init();
     }
@@ -36,17 +38,26 @@ public class MainAvtivity extends Activity {
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
-                    case R.id.conform:
+                    case R.id.btn_conform:
+                        Log.e("TAG", "onClick: " + "点击了");
                         binding.myview.setPointOne(pointOne);
                         binding.myview.setPointTwo(pointTwo);
+                        binding.myview.setBezierPoint(bezierPoint);
                         binding.myview.setVisibility(View.VISIBLE);
+                        binding.myview.setIsBezier(binding.isBezier.isChecked());
                         binding.myview.startDraw();
                         break;
                     case R.id.firstPoint:
+                        changeBackground(view.getId());
                         binding.setPoint(pointOne);
                         break;
-                    case R.id.secondPint:
+                    case R.id.secondPoint:
+                        changeBackground(view.getId());
                         binding.setPoint(pointTwo);
+                        break;
+                    case R.id.bezierPoint:
+                        changeBackground(view.getId());
+                        binding.setPoint(bezierPoint);
                         break;
                     case R.id.myview:
                         view.setVisibility(View.GONE);
@@ -55,6 +66,12 @@ public class MainAvtivity extends Activity {
             }
         });
 
+    }
+
+    private void changeBackground(int id) {
+        binding.firstPoint.setBackgroundColor(id == R.id.firstPoint ? Color.parseColor("#ff0000") : Color.parseColor("#999999"));
+        binding.secondPoint.setBackgroundColor(id == R.id.secondPoint ? Color.parseColor("#ff0000") : Color.parseColor("#999999"));
+        binding.bezierPoint.setBackgroundColor(id == R.id.bezierPoint ? Color.parseColor("#ff0000") : Color.parseColor("#999999"));
     }
 
     private MagicLineViewPlus.DrawingListener drawingListener = new MagicLineViewPlus.DrawingListener() {

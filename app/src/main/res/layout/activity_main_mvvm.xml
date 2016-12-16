@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,7 +40,7 @@
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:hint="请输入点运动中心x坐标"
                     android:text="@={point.centerX}"
                     android:textColor="#000000"
@@ -155,17 +156,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="#999"
                     android:gravity="center"
                     android:onClick="@{myClick}"
                     android:text="编辑第一个点的信息"
                     android:textColor="#fff"
-                    android:textSize="15dp" />
+                    android:textSize="32px" />
 
                 <Button
-                    android:id="@+id/secondPint"
+                    android:id="@+id/secondPoint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="#999"
                     android:onClick="@{myClick}"
                     android:text="编辑第二个点的信息"
                     android:textColor="#fff"
@@ -173,8 +177,45 @@
                     android:textSize="32px" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100px"
+                android:layout_marginTop="15dp"
+                android:background="#ffffff"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bezierPoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#999"
+                    android:gravity="center"
+                    android:onClick="@{myClick}"
+                    android:text="编辑贝塞尔控制点信息"
+                    android:textColor="#fff"
+                    android:textSize="30px" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="运动轨迹是否为贝塞尔曲线(二阶):"
+                    android:textColor="#000000"
+                    android:textSize="30px" />
+
+                <CheckBox
+                    android:id="@+id/isBezier"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:text="CheckBox" />
+            </LinearLayout>
+
             <Button
-                android:id="@+id/conform"
+                android:id="@+id/btn_conform"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
@@ -187,8 +228,8 @@
         <com.czy.magicline.demo.MagicLineViewPlus
             android:id="@+id/myview"
             android:layout_width="match_parent"
-            android:onClick="@{myClick}"
             android:layout_height="match_parent"
+            android:onClick="@{myClick}"
             android:visibility="gone" />
     </FrameLayout>
 </layout>

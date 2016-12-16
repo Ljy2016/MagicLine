@@ -23,11 +23,12 @@ import java.util.Random;
 public class MagicLineViewPlus extends View {
     private static final String TAG = "MagicLineView";
     //起点在x、y移动范围
-    private float p1XLength = 400, p1YLength = 20, speedP1 = 0.15f;
+    private float p1XLength = 400, p1YLength = 20, speedP1 = 0.15f, speedB1 = 0.0f;
     private float p2XLength = 20, p2YLength = 400, speedP2 = 0.05f;
-    private float angleP1 = 0, angleP2 = 0;
+    private float angleP1 = 0, angleP2 = 0, angleB1 = 0;
     private int viewWidth, viewHeight;
     private Paint paint;
+    private boolean isBezier;
     Random rand;
     private ValueAnimator valueAnimator;
     //记录移动过的所有点的数据
@@ -35,12 +36,19 @@ public class MagicLineViewPlus extends View {
     private DrawingListener drawingListener;
     //    private int[] colors = new int[]{Color.RED, Color.WHITE, Color.BLUE};
     //动画绘制的时间
-    private int animDuration = 1000 * 10;
+    private int animDuration = 1000 * 15;
     private Path path;
 
 
     private PointModel pointOne;
     private PointModel pointTwo;
+
+
+    private PointModel bezierPoint;
+
+    public void setBezierPoint(PointModel bezierPoint) {
+        this.bezierPoint = bezierPoint;
+    }
 
     public void setPointOne(PointModel pointOne) {
         this.pointOne = pointOne;
@@ -50,6 +58,10 @@ public class MagicLineViewPlus extends View {
     public void setPointTwo(PointModel pointTwo) {
         this.pointTwo = pointTwo;
         speedP2 = Float.parseFloat(pointTwo.getPalstance());
+    }
+
+    public void setIsBezier(boolean isBezier) {
+        this.isBezier = isBezier;
     }
 
     public MagicLineViewPlus(Context context, AttributeSet attrs) {
@@ -81,6 +93,7 @@ public class MagicLineViewPlus extends View {
 //        rand = new Random();
         corrDatas = new ArrayList<>();
         path = new Path();
+        bezierPoint = new PointModel();
 
     }
 
@@ -89,13 +102,17 @@ public class MagicLineViewPlus extends View {
         super.onDraw(canvas);
         for (int i = 0; i < corrDatas.size(); i++) {
             CorrdinateData cd = corrDatas.get(i);
-//          Shader shader = new LinearGradient(cd.p1X, cd.p1Y, cd.p2X, cd.p2Y, colors, null, Shader.TileMode.MIRROR);
-//          paint.setShader(shader);
-//            path.reset();
-//            path.moveTo(cd.p1X, cd.p1Y);
-//            path.quadTo(viewWidth / 2f, viewHeight / 2f, cd.p2X, cd.p2Y);
-            canvas.drawLine(cd.p1X, cd.p1Y, cd.p2X, cd.p2Y, paint);
-//            canvas.drawPath(path, paint);
+            if (isBezier) {
+                path.reset();
+                path.moveTo(cd.p1X, cd.p1Y);
+                path.quadTo(cd.b1X, cd.b1Y, cd.p2X, cd.p2Y);
+                canvas.drawPath(path, paint);
+            } else {
+                canvas.drawLine(cd.p1X, cd.p1Y, cd.p2X, cd.p2Y, paint);
+            }
+            //          Shader shader = new LinearGradient(cd.p1X, cd.p1Y, cd.p2X, cd.p2Y, colors, null, Shader.TileMode.MIRROR);
+            //          paint.setShader(shader);
+
         }
     }
 
@@ -147,11 +164,13 @@ public class MagicLineViewPlus extends View {
     private void calculate() {
         angleP1 = angleP1 + speedP1;
         angleP2 = angleP2 + speedP2;
+        angleB1 = angleB1 + speedB1;
         pointOne.setCurrentX(angleP1);
-        pointOne.setCurrentY(angleP2);
-        pointTwo.setCurrentX(angleP1);
+        pointOne.setCurrentY(angleP1);
+        pointTwo.setCurrentX(angleP2);
         pointTwo.setCurrentY(angleP2);
-
+        bezierPoint.setCurrentY(angleB1);
+        bezierPoint.setCurrentX(angleB1);
         //两个点的位置更新
 //        float nowP1X = (float) (p1XLength * Math.cos(angleP1) + viewWidth / 2f);
 //        Log.e(TAG, "calculate x1: " + nowP1X);
@@ -165,18 +184,20 @@ public class MagicLineViewPlus extends View {
 //        float nowP2X = (float) (p2XLength * Math.cos(angleP2) + viewWidth / 2f);
 //        float nowP2Y = (float) (p2YLength * Math.sin(angleP2) + viewHeight / 2f);
 
-        CorrdinateData corrdinataData = new CorrdinateData(pointOne.getCurrentX(), pointOne.getCurrentY(), pointTwo.getCurrentX(), pointTwo.getCurrentY());
+        CorrdinateData corrdinataData = new CorrdinateData(pointOne.getCurrentX(), pointOne.getCurrentY(), pointTwo.getCurrentX(), pointTwo.getCurrentY(), bezierPoint.getCurrentX(), bezierPoint.getCurrentY());
         corrDatas.add(corrdinataData);
     }
 
     private class CorrdinateData {
-        float p1X, p1Y, p2X, p2Y;
+        float p1X, p1Y, p2X, p2Y, b1X, b1Y;
 
-        CorrdinateData(float p1X, float p1Y, float p2X, float p2Y) {
+        CorrdinateData(float p1X, float p1Y, float p2X, float p2Y, float b1X, float b1Y) {
             this.p1X = p1X;
             this.p1Y = p1Y;
             this.p2X = p2X;
             this.p2Y = p2Y;
+            this.b1X = b1X;
+            this.b1Y = b1Y;
         }
     }
 
