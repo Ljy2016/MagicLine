@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
@@ -17,19 +18,32 @@ import com.czy.magicline.demo.databinding.ActivityMainMvvmBinding;
  */
 
 public class MainAvtivity extends Activity {
+    //第一个点
     private PointModel pointOne;
+    //第二个点
     private PointModel pointTwo;
+    //贝塞尔曲线运动的控制点
     private PointModel bezierPoint;
+    //databinding生成的类
     private ActivityMainMvvmBinding binding;
+    //路径生成类
+    private PathModel pathModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_mvvm);
-        pointOne = new PointModel();
-        pointTwo = new PointModel();
-        bezierPoint = new PointModel();
+        DisplayMetrics dm = new DisplayMetrics();
+        // 获取屏幕信息
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int centerX = dm.widthPixels/2;
+        int centerY = dm.heightPixels/2;
+        pointOne = new PointModel(centerX, centerY);
+        pointTwo = new PointModel(centerX, centerY);
+        bezierPoint = new PointModel(centerX, centerY);
+        pathModel = new PathModel();
         binding.setPoint(pointOne);
+        changeBackground(R.id.firstPoint);
         init();
     }
 
@@ -39,12 +53,16 @@ public class MainAvtivity extends Activity {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.btn_conform:
-                        Log.e("TAG", "onClick: " + "点击了");
-                        binding.myview.setPointOne(pointOne);
-                        binding.myview.setPointTwo(pointTwo);
-                        binding.myview.setBezierPoint(bezierPoint);
+                        pathModel.setFirstPoint(pointOne);
+                        pathModel.setSecondPoint(pointTwo);
+                        //勾选贝塞尔路径
+                        if (binding.isBezier.isChecked()) {
+                            pathModel.setBeizerPoint(bezierPoint);
+                            binding.myview.setPathList(pathModel.getBezierPathList(1000));
+                        } else {
+                            binding.myview.setPathList(pathModel.getPathList(1000));
+                        }
                         binding.myview.setVisibility(View.VISIBLE);
-                        binding.myview.setIsBezier(binding.isBezier.isChecked());
                         binding.myview.startDraw();
                         break;
                     case R.id.firstPoint:
@@ -60,12 +78,12 @@ public class MainAvtivity extends Activity {
                         binding.setPoint(bezierPoint);
                         break;
                     case R.id.myview:
+                        binding.myview.stopDraw();
                         view.setVisibility(View.GONE);
                         break;
                 }
             }
         });
-
     }
 
     private void changeBackground(int id) {
@@ -73,16 +91,4 @@ public class MainAvtivity extends Activity {
         binding.secondPoint.setBackgroundColor(id == R.id.secondPoint ? Color.parseColor("#ff0000") : Color.parseColor("#999999"));
         binding.bezierPoint.setBackgroundColor(id == R.id.bezierPoint ? Color.parseColor("#ff0000") : Color.parseColor("#999999"));
     }
-
-    private MagicLineViewPlus.DrawingListener drawingListener = new MagicLineViewPlus.DrawingListener() {
-        @Override
-        public void drawStart() {
-
-        }
-
-        @Override
-        public void drawOver() {
-
-        }
-    };
 }

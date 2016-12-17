@@ -1,7 +1,9 @@
 package com.czy.magicline.demo;
 
+import android.content.Context;
 import android.net.ParseException;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.widget.Toast;
 
 /**
@@ -18,12 +20,26 @@ public class PointModel {
     private int maxX = 500;
     //y轴最大值
     private int maxY = 500;
-    //运动角速度
+    //弧度变化量（相当于角速度）
     private float palstance = 0.5f;
     //当前x坐标
     private int currentX;
     //当前y坐标
     private int currentY;
+
+    //初始弧度x
+    private float radinaX = 0;
+    //初始弧度y
+    private float radinaY = 0;
+
+    public PointModel() {
+    }
+
+    public PointModel(int centerX, int centerY) {
+        this.centerX = centerX;
+        this.centerY = centerY;
+
+    }
 
     public String getCenterX() {
         return centerX + "";
@@ -86,10 +102,14 @@ public class PointModel {
     }
 
     public int getCurrentX() {
+        radinaX += palstance;
+        currentX = (int) (maxX * Math.cos(radinaX) + centerX);
         return currentX;
     }
 
     public int getCurrentY() {
+        radinaY += palstance;
+        currentY = (int) (maxY * Math.sin(radinaY) + centerY);
         return currentY;
     }
 
@@ -102,11 +122,5 @@ public class PointModel {
         currentY = (int) (maxY * Math.sin(radina) + centerY);
     }
 
-    public void setCurrentX(int currentX) {
-        this.currentX = currentX;
-    }
 
-    public void setCurrentY(int currentY) {
-        this.currentY = currentY;
-    }
 }
